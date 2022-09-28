@@ -53,6 +53,7 @@ def generate_successors(node, map_obj):
         successors.append(Node([x,y+1], map_obj.get_cell_value([x,y+1])))
     return successors
 
+# Updating parent and computing f value
 def attach_and_eval(child, parent):
     child.parent = parent
     child.g = parent.g + child.value
@@ -60,7 +61,12 @@ def attach_and_eval(child, parent):
     child.f = child.g + child.h
 
 def propagate_path_improvements(parent):
-    pass
+    for child in parent.kids:
+        if parent.g + child.value < child.g:
+            child.parent = parent
+            child.g = parent.g + child.value
+            child.f = child.g + child.h
+            propagate_path_improvements(child)
 
 # Manhattan distance used as admissable heuristic
 def heuristic(node, goal_node):
@@ -95,7 +101,6 @@ def astar(start_node, goal_node, map_obj):
                     propagate_path_improvements(node)
 
                 
-
 
 
 # astar(Node(start_pos, start_val), Node(goal_pos, goal_val))
