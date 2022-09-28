@@ -13,10 +13,10 @@ map_obj = Map_Obj(task=1)
 # print(int_map)
 # print(str_map)
 
-# start_pos = map_obj.get_start_pos()
-# goal_pos = map_obj.get_goal_pos()
-# start_val = map_obj.get_cell_value(start_pos)
-# goal_val = map_obj.get_cell_value(goal_pos)
+start_pos = map_obj.get_start_pos()
+goal_pos = map_obj.get_goal_pos()
+start_val = map_obj.get_cell_value(start_pos)
+goal_val = map_obj.get_cell_value(goal_pos)
 # print(start_pos, goal_pos, start_val, goal_val, sep="\n")
 
 
@@ -43,23 +43,24 @@ def generate_successors(node, map_obj):
     successors = []
     x = node.x_pos
     y = node.y_pos
-    if x-1>=0:
+    if x-1>=0 and map_obj.get_cell_value([x-1,y]) > 0:
         successors.append(Node([x-1,y], map_obj.get_cell_value([x-1,y])))
-    if x+1<=46:
+    if x+1<=46 and map_obj.get_cell_value([x+1,y]) > 0:
         successors.append(Node([x+1,y], map_obj.get_cell_value([x+1,y])))
-    if y-1>=0:
+    if y-1>=0 and map_obj.get_cell_value([x,y-1]) > 0:
         successors.append(Node([x,y-1], map_obj.get_cell_value([x,y-1])))
-    if y+1<=38:
+    if y+1<=38 and map_obj.get_cell_value([x,y+1]) > 0:
         successors.append(Node([x,y+1], map_obj.get_cell_value([x,y+1])))
     return successors
 
 # Updating parent and computing f value
-def attach_and_eval(child, parent):
+def attach_and_eval(child, parent, goal_node):
     child.parent = parent
     child.g = parent.g + child.value
-    child.h = heuristic(child)
+    child.h = heuristic(child, goal_node)
     child.f = child.g + child.h
 
+# Ensure all nodes in search graph always aware of the current best parent and g value
 def propagate_path_improvements(parent):
     for child in parent.kids:
         if parent.g + child.value < child.g:
@@ -87,20 +88,26 @@ def astar(start_node, goal_node, map_obj):
         current_node.closed = True
         closed_nodes.append(current_node)
         if current_node.state == goal_node.state:
-            return "Succeed" # Returning succeed
-        successors = generate_successors(current_node)
+            return (closed_nodes, current_node) # Succeed
+        successors = generate_successors(current_node, map_obj)
         for node in successors:
+            # Check if state already exists, then set node to already created node
+            for closed_node in closed_nodes:
+                if node.state == closed_node.state:
+                    node = closed_node
+            for open_node in open_nodes:
+                if node.state == open_node.state:
+                    node = open_node
             current_node.kids.append(node)
             if node not in open_nodes and node not in closed_nodes:
-                attach_and_eval(node, current_node)
+                attach_and_eval(node, current_node, goal_node)
                 open_nodes.append(node)
-                # sort open_nodes by ascending f
+                if len(open_nodes) > 0:
+                    open_nodes.sort(key=lambda a: a.f) # Sort open_nodes by ascending f
             elif current_node.g + node.value < node.g: # Found cheaper path to node via current_node
-                attach_and_eval(node, current_node)
+                attach_and_eval(node, current_node, goal_node)
                 if node in closed_nodes:
                     propagate_path_improvements(node)
 
-                
 
-
-# astar(Node(start_pos, start_val), Node(goal_pos, goal_val))
+closed, current = astar(Node(start_pos, start_val), Node(goal_pos, goal_val), map_obj)
