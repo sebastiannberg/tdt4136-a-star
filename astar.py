@@ -1,4 +1,3 @@
-import numpy as np
 from Map import Map_Obj
 
 # Først inspirasjon fra disse, men så insipirert fra vedlegget og boka og ved å studere map_obj sin kildekode
@@ -22,7 +21,8 @@ map_obj = Map_Obj(task=1)
 
 
 
-# Class to keep track of cells as nodes
+# Class to keep track of nodes when searching
+# Nodes are created from cells in the map of samfundet provided by tdt4136 via Map.py and csv files
 class Node:
 
     def __init__(self, position, value, parent = None, kids = [], g = None, h = None, f = None):
@@ -62,12 +62,6 @@ def attach_and_eval(child, parent):
 def propagate_path_improvements(parent):
     pass
 
-# start_node = Node(map_obj.get_start_pos(), map_obj.get_cell_value(map_obj.get_start_pos()))
-# start_node = Node([22,18], map_obj.get_cell_value(map_obj.get_start_pos()))
-# generate_successors(start_node, map_obj)
-# for node in start_node.kids:
-#     print(node.state, node.value, node.parent)
-
 # Manhattan distance used as admissable heuristic
 def heuristic(node, goal_node):
     return abs(node.x_pos - goal_node.x_pos) + abs(node.y_pos - goal_node.y_pos)
@@ -98,6 +92,7 @@ def astar(start_node, goal_node, map_obj):
             elif current_node.g + node.value < node.g: # Found cheaper path to node via current_node
                 attach_and_eval(node, current_node)
                 if node in closed_nodes:
+                    propagate_path_improvements(node)
 
                 
 
