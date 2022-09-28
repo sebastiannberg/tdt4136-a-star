@@ -25,7 +25,7 @@ map_obj = Map_Obj(task=1)
 # Class to keep track of cells as nodes
 class Node:
 
-    def __init__(self, position, value, parent = None, kids = None, g = None, h = None, f = None):
+    def __init__(self, position, value, parent = None, kids = [], g = None, h = None, f = None):
         self.x_pos = position[0]
         self.y_pos = position[1]
         self.state = position
@@ -39,20 +39,28 @@ class Node:
 
 
 # Generate successors to a given node
-# Helper function for astar
 def generate_successors(node, map_obj):
     successors = []
     x = node.x_pos
     y = node.y_pos
     if x-1>=0:
-        successors.append(Node([x-1,y], map_obj.get_cell_value([x-1,y]), parent=node))
+        successors.append(Node([x-1,y], map_obj.get_cell_value([x-1,y])))
     if x+1<=46:
-        successors.append(Node([x+1,y], map_obj.get_cell_value([x+1,y]), parent=node))
+        successors.append(Node([x+1,y], map_obj.get_cell_value([x+1,y])))
     if y-1>=0:
-        successors.append(Node([x,y-1], map_obj.get_cell_value([x,y-1]), parent=node))
+        successors.append(Node([x,y-1], map_obj.get_cell_value([x,y-1])))
     if y+1<=38:
-        successors.append(Node([x,y+1], map_obj.get_cell_value([x,y+1]), parent=node))
-    node.kids = successors
+        successors.append(Node([x,y+1], map_obj.get_cell_value([x,y+1])))
+    return successors
+
+def attach_and_eval(child, parent):
+    child.parent = parent
+    child.g = parent.g + child.value
+    child.h = heuristic(child)
+    child.f = child.g + child.h
+
+def propagate_path_improvements(parent):
+    pass
 
 # start_node = Node(map_obj.get_start_pos(), map_obj.get_cell_value(map_obj.get_start_pos()))
 # start_node = Node([22,18], map_obj.get_cell_value(map_obj.get_start_pos()))
@@ -60,7 +68,7 @@ def generate_successors(node, map_obj):
 # for node in start_node.kids:
 #     print(node.state, node.value, node.parent)
 
-# Manhattan distance
+# Manhattan distance used as admissable heuristic
 def heuristic(node, goal_node):
     return abs(node.x_pos - goal_node.x_pos) + abs(node.y_pos - goal_node.y_pos)
 
@@ -82,7 +90,17 @@ def astar(start_node, goal_node, map_obj):
             return "Succeed" # Returning succeed
         successors = generate_successors(current_node)
         for node in successors:
-            pass # må implementere if else fra pseudo
+            current_node.kids.append(node)
+            if node not in open_nodes and node not in closed_nodes:
+                attach_and_eval(node, current_node)
+                open_nodes.append(node)
+                # sort open_nodes by ascending f
+            elif current_node.g + node.value < node.g: # Found cheaper path to node via current_node
+                attach_and_eval(node, current_node)
+                if node in closed_nodes:
+
+                
+
 
 
 # astar(Node(start_pos, start_val), Node(goal_pos, goal_val))
