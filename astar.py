@@ -1,26 +1,3 @@
-from Map import Map_Obj
-
-# Først inspirasjon fra disse, men så insipirert fra vedlegget og boka og ved å studere map_obj sin kildekode
-# https://github.com/jrialland/python-astar/blob/master/astar/__init__.py
-# https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
-# https://github.com/VaibhavSaini19/A_Star-algorithm-in-Python/blob/master/A-Star%20Algorithm
-
-
-map_obj = Map_Obj(task=1)
-
-# map_obj.show_map()
-# int_map, str_map = map_obj.get_maps()
-# print(int_map)
-# print(str_map)
-
-start_pos = map_obj.get_start_pos()
-goal_pos = map_obj.get_goal_pos()
-start_val = map_obj.get_cell_value(start_pos)
-goal_val = map_obj.get_cell_value(goal_pos)
-# print(start_pos, goal_pos, start_val, goal_val, sep="\n")
-
-
-
 # Class to keep track of nodes when searching
 # Nodes are created from cells in the map of samfundet provided by tdt4136 via Map.py and csv files
 class Node:
@@ -109,5 +86,3 @@ def astar(start_node, goal_node, map_obj):
                 if node in closed_nodes:
                     propagate_path_improvements(node)
 
-
-closed, current = astar(Node(start_pos, start_val), Node(goal_pos, goal_val), map_obj)
