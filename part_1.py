@@ -35,3 +35,19 @@ update_closed_nodes(int_map, closed, start_node1, goal_node1)
 draw_map(int_map) # Draw map with closed nodes marked
 update_path_nodes(int_map, current)
 draw_map(int_map) # Draw map with path nodes marked
+
+# Task 2
+map_obj2 = Map_Obj(task=2)
+start_node2 = Node(map_obj2.get_start_pos(), map_obj2.get_cell_value(map_obj2.get_start_pos()))
+goal_node2 = Node(map_obj2.get_goal_pos(), map_obj2.get_cell_value(map_obj2.get_goal_pos()))
+
+closed, current = astar(start_node2, goal_node2, map_obj2)
+
+int_map = get_int_map(map_obj2)
+draw_map(int_map) # Draw initialized map
+update_start_goal(int_map, start_node2, goal_node2)
+draw_map(int_map) # Draw map with start and goal marked
+update_closed_nodes(int_map, closed, start_node2, goal_node2)
+draw_map(int_map) # Draw map with closed nodes marked
+update_path_nodes(int_map, current)
+draw_map(int_map) # Draw map with path nodes
