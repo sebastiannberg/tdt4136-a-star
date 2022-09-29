@@ -28,13 +28,13 @@ goal_node1 = Node(map_obj1.get_goal_pos(), map_obj1.get_cell_value(map_obj1.get_
 closed, current = astar(start_node1, goal_node1, map_obj1)
 
 int_map = get_int_map(map_obj1)
-draw_map(int_map) # Draw initialized map
+draw_map(int_map, False, "task1-1.png") # Draw initialized map
 update_start_goal(int_map, start_node1, goal_node1)
-draw_map(int_map) # Draw map with start and goal marked
+draw_map(int_map, False, "task1-2.png") # Draw map with start and goal marked
 update_closed_nodes(int_map, closed, start_node1, goal_node1)
-draw_map(int_map) # Draw map with closed nodes marked
+draw_map(int_map, False, "task1-3.png") # Draw map with closed nodes marked
 update_path_nodes(int_map, current)
-draw_map(int_map) # Draw map with path nodes marked
+draw_map(int_map, False, "task1-4.png") # Draw map with path nodes marked
 
 # Task 2
 map_obj2 = Map_Obj(task=2)
@@ -44,10 +44,10 @@ goal_node2 = Node(map_obj2.get_goal_pos(), map_obj2.get_cell_value(map_obj2.get_
 closed, current = astar(start_node2, goal_node2, map_obj2)
 
 int_map = get_int_map(map_obj2)
-draw_map(int_map) # Draw initialized map
+draw_map(int_map, False, "task2-1.png") # Draw initialized map
 update_start_goal(int_map, start_node2, goal_node2)
-draw_map(int_map) # Draw map with start and goal marked
+draw_map(int_map, False, "task2-2.png") # Draw map with start and goal marked
 update_closed_nodes(int_map, closed, start_node2, goal_node2)
-draw_map(int_map) # Draw map with closed nodes marked
+draw_map(int_map, False, "task2-3.png") # Draw map with closed nodes marked
 update_path_nodes(int_map, current)
-draw_map(int_map) # Draw map with path nodes
+draw_map(int_map, False, "task2-4.png") # Draw map with path nodes

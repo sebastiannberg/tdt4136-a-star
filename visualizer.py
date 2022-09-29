@@ -13,7 +13,7 @@ colors = {
 }
 
 # Based on show_map given in Map.py
-def draw_map(themap):
+def draw_map(themap, save = False, filename = None,):
     # Define width and height of image
     width = len(themap[0])
     height = len(themap)
@@ -33,3 +33,5 @@ def draw_map(themap):
                     pixels[x * scale + i,
                             y * scale + j] = colors[themap[y][x]]
     image.show()
+    if save and filename:
+        image.save(filename)
