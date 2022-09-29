@@ -1,8 +1,26 @@
-# Class to keep track of nodes when searching
-# Nodes are created from cells in the map of samfundet provided by tdt4136 via Map.py and csv files
 class Node:
+    """Nodes are created from cells in the map provided by tdt4136 via Map.py and csv files."""
 
     def __init__(self, position, value, parent = None, kids = [], g = None, h = None, f = None):
+        """
+        Parameters
+        ----------
+        position : (int, int)
+            A tuple describing the node's position
+        value : int
+            The value (cost) of traversing this node
+        parent : Node, optional
+            The parent-node of this node
+        kids: [Node], optional
+            A list containing the kids to this node in the search tree
+        g: int, optional
+            This node's g value
+        h: int, optional
+            This node's h value
+        f: int, optional
+            This node's f value
+        """
+
         self.x_pos = position[0]
         self.y_pos = position[1]
         self.state = position
@@ -29,7 +47,7 @@ def generate_successors(node, map_obj):
     Returns
     -------
     list
-        a list of all the successor-nodes
+        A list of all the successor-nodes
     """
 
     successors = []
@@ -45,15 +63,35 @@ def generate_successors(node, map_obj):
         successors.append(Node([x,y+1], map_obj.get_cell_value([x,y+1])))
     return successors
 
-# Updating parent and computing f value
 def attach_and_eval(child, parent, goal_node):
+    """Helper function for astar, updating parent and computing f value
+
+    Parameters
+    ----------
+    child : Node
+        The child node that is being attached to parent
+    parent : Node
+        The node that is being set as parent node to child
+    goal_node: Node
+        The node that is set as goal_node in current
+        iteration of astar
+    """
+
     child.parent = parent
     child.g = parent.g + child.value
     child.h = heuristic(child, goal_node)
     child.f = child.g + child.h
 
-# Ensure all nodes in search graph always aware of the current best parent and g value
 def propagate_path_improvements(parent):
+    """Helper function for astar, ensure all nodes in search graph always aware of the
+    current best parent and g value
+
+    Parameters
+    ----------
+    parent : Node
+        The node that is being propagated
+    """
+
     for child in parent.kids:
         if parent.g + child.value < child.g:
             child.parent = parent
@@ -61,11 +99,41 @@ def propagate_path_improvements(parent):
             child.f = child.g + child.h
             propagate_path_improvements(child)
 
-# Manhattan distance used as admissable heuristic
 def heuristic(node, goal_node):
+    """Heuristic function (manhattan distance + admissable)
+
+    Parameters
+    ----------
+    node : Node
+        The node that is computing h value
+    goal_node : Node
+        The goal node in current iteration of astar
+    """
+
     return abs(node.x_pos - goal_node.x_pos) + abs(node.y_pos - goal_node.y_pos)
 
 def astar(start_node, goal_node, map_obj):
+    """Implementation of A* algorithm
+
+    Parameters
+    ----------
+    start_node : Node
+        The starting node
+    goal_node: Node
+        The goal node
+    map_obj : Map_Obj
+        An object that is used to find the values
+        of specific positions on a map
+
+    Returns
+    -------
+    string
+        A string if the algorithm fails at finding a solution
+    ([Node], Node)
+        A tuple consisting of a list of all closed nodes and the
+        current node when finding a solution
+    """
+
     open_nodes = [] # Open nodes contain nodes in ascending f-value
     closed_nodes = []
     start_node.g = 0
@@ -100,4 +168,3 @@ def astar(start_node, goal_node, map_obj):
                 attach_and_eval(node, current_node, goal_node)
                 if node in closed_nodes:
                     propagate_path_improvements(node)
-
