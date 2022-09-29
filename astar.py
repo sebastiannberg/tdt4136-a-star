@@ -15,8 +15,23 @@ class Node:
         self.closed = False
 
 
-# Generate successors to a given node
 def generate_successors(node, map_obj):
+    """Generates successor-nodes to a given node
+
+    Parameters
+    ----------
+    node : Node
+        The node to generate successor-nodes from
+    map_obj : Map_Obj
+        An object that is used to find the values
+        of specific positions on a map
+
+    Returns
+    -------
+    list
+        a list of all the successor-nodes
+    """
+
     successors = []
     x = node.x_pos
     y = node.y_pos
