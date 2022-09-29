@@ -71,6 +71,17 @@ def update_path_nodes(int_map, current_node):
         current_node = current_node.parent
 
 def execute_task(task_number, saved = False):
+    """Executes one of the tasks in the assignment by TDT4136@NTNU
+
+    Parameters
+    ----------
+    task_number : int
+        The task number to be executed
+    save : boolean, optional
+        Set this to True if you want to save .png files of the visualizing
+        for the path finding. Files are saved in the same directory as this file
+    """
+
     map_obj = Map_Obj(task=task_number)
     start_node = Node(map_obj.get_start_pos(), map_obj.get_cell_value(map_obj.get_start_pos()))
     goal_node = Node(map_obj.get_goal_pos(), map_obj.get_cell_value(map_obj.get_goal_pos()))
@@ -78,7 +89,7 @@ def execute_task(task_number, saved = False):
     closed, current = astar(start_node, goal_node, map_obj)
 
     int_map = get_int_map(map_obj)
-    draw_map(int_map, saved, f"task{task_number}-1.png") # Draw initialized map
+    draw_map(int_map, saved, f"task{task_number}-1.png") # Draw initial map
     update_start_goal(int_map, start_node, goal_node)
     draw_map(int_map, saved, f"task{task_number}-2.png") # Draw map with start and goal marked
     update_closed_nodes(int_map, closed, start_node, goal_node)

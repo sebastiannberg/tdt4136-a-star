@@ -12,8 +12,21 @@ colors = {
     4:   (36, 36, 36),     # Black
 }
 
-# Based on show_map given in Map.py
+# Based on the function show_map found in Map.py
 def draw_map(themap, save = False, filename = None,):
+    """Draws the given integer map to a .png file
+
+    Parameters
+    ----------
+    themap : [[int]]
+        The integer map that is being drawn
+    save : boolean, optional
+        Set this to True if you want to save .png files of the visualizing
+        for the path finding. Files are saved in the same directory as this file.
+    filename : string, optional
+        The filename used if save is set to True
+    """
+
     # Define width and height of image
     width = len(themap[0])
     height = len(themap)
@@ -35,3 +48,5 @@ def draw_map(themap, save = False, filename = None,):
     image.show()
     if save and filename:
         image.save(filename)
+    if save and not filename:
+        image.save("no-name.png")
