@@ -1,5 +1,5 @@
 # tdt4136-a-star
-Implementation of A* algorithm in the course TDT4136 Introduction to AI @ NTNU.
+This repository contains my implementation of the A* algorithm for the TDT4136 Introduction to AI course at the Norwegian University of Science and Technology (NTNU).
 
 ### Background
 This project is based on an assignemnt from the course TDT4136 Introduction to AI. The
